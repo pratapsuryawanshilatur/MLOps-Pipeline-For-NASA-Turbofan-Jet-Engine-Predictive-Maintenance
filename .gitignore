@@ -1,0 +1,17 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env/
+.DS_Store
+.ipynb_checkpoints
+*.ipynb
+models/test_*
+logs/
+data/raw/
+data/processed/turbofan_train_FD001.parquet
