@@ -3,16 +3,22 @@ kind: Kustomization
 
 namespace: turbofan-staging
 
-bases:
+resources:
   - ../../base
 
-patchesStrategicMerge:
-  - deployment-patch.yaml
+patches:
+  - path: deployment-patch.yaml
+    target:
+      kind: Deployment
+      name: turbofan-api
 
-resources:
-  - ingress.yaml
-
-# Override replicas for staging
+# Set replicas
 replicas:
   - name: turbofan-api
     count: 2
+
+# Add labels here instead
+labels:
+  - pairs:
+      app: turbofan-api
+      managed-by: argocd

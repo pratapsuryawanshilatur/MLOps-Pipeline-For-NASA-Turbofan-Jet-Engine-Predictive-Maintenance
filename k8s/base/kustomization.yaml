@@ -5,16 +5,6 @@ resources:
   - configmap.yaml
   - persistent-volume.yaml
   - persistent-volume-claim.yaml
-
-# Common labels
-commonLabels:
-  app: turbofan-api
-  managed-by: argocd
-
-# Add deployment and service
-resources:
-  - configmap.yaml
-  - persistent-volume.yaml
-  - persistent-volume-claim.yaml
   - deployment.yaml
   - service.yaml
+
