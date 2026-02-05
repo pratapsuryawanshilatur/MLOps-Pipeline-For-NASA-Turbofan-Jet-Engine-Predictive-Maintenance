@@ -15,7 +15,7 @@ patches:
 # Set replicas
 replicas:
   - name: turbofan-api
-    count: 2
+    count: 3
 
 # Add labels here instead
 labels:
