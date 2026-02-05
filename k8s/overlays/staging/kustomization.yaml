@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: turbofan-staging
+
+bases:
+  - ../../base
+
+patchesStrategicMerge:
+  - deployment-patch.yaml
+
+resources:
+  - ingress.yaml
+
+# Override replicas for staging
+replicas:
+  - name: turbofan-api
+    count: 2

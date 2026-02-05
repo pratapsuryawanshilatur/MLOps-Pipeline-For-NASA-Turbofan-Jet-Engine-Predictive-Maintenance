@@ -40,4 +40,8 @@ Automated tests run on every push:
 - Docker
 - Scikit-learn
 - GitHub Actions
+<<<<<<< HEAD
 - Pandas, NumPy
+=======
+- Pandas, NumPy
+>>>>>>> 4a01d67 (Add GitOps structure for ArgoCD)

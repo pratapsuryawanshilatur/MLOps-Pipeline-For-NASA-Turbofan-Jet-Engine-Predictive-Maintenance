@@ -1,3 +1,13 @@
+# Models
+models/
+!models/README.md
+
+# Data files (except samples)
+data/processed/*.parquet
+!data/processed/*_sample.parquet
+data/raw/
+
+# Other ignores
 .env
 __pycache__/
 *.pyc
@@ -11,7 +21,4 @@ venv/
 .DS_Store
 .ipynb_checkpoints
 *.ipynb
-models/test_*
 logs/
-data/raw/
-data/processed/turbofan_train_FD001.parquet

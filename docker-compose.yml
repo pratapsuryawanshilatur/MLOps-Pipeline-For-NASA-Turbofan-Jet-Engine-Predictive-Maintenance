@@ -55,6 +55,27 @@ services:
       bash -c "
       airflow scheduler
       "
+  
+  turbofan-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: always
+    depends_on:
+      - airflow-webserver
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+    environment:
+      - MODEL_PATH=/app/models/turbofan_model_v1.joblib
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
 
 volumes:
   postgres-db-volume:
+

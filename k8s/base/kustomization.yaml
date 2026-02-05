@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - configmap.yaml
+  - persistent-volume.yaml
+  - persistent-volume-claim.yaml
+
+# Common labels
+commonLabels:
+  app: turbofan-api
+  managed-by: argocd
+
+# Add deployment and service
+resources:
+  - configmap.yaml
+  - persistent-volume.yaml
+  - persistent-volume-claim.yaml
+  - deployment.yaml
+  - service.yaml

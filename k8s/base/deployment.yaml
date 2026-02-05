@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turbofan-api
+  labels:
+    app: turbofan-api
+    component: ml-serving
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turbofan-api
+  template:
+    metadata:
+      labels:
+        app: turbofan-api
+        component: ml-serving
+    spec:
+      securityContext:
+        runAsUser: 0
+        fsGroup: 0
+      containers:
+      - name: turbofan-api
+        image: turbofan-api:v1.0.2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: MODEL_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: turbofan-api-config
+              key: MODEL_PATH
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: turbofan-api-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: turbofan-api-config
+              key: LOG_LEVEL
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: models-volume
+          mountPath: /app/models
+          readOnly: true
+      volumes:
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: turbofan-models-pvc

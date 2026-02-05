@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: turbofan-api-service
+  labels:
+    app: turbofan-api
+    component: ml-serving
+spec:
+  selector:
+    app: turbofan-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  type: ClusterIP  # Changed from NodePort for GitOps
