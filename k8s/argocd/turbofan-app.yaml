@@ -3,34 +3,19 @@ kind: Application
 metadata:
   name: turbofan-api
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  
   source:
     repoURL: https://github.com/pratapsuryawanshilatur/MLOps-Pipeline-For-NASA-Turbofan-Jet-Engine-Predictive-Maintenance
     targetRevision: main
     path: k8s/overlays/staging
-    directory:
-      recurse: true
-  
+    kustomize: {}  # THIS IS THE KEY - tells ArgoCD to use Kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: turbofan-staging
-  
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-      allowEmpty: false
     syncOptions:
       - CreateNamespace=true
-      - PrunePropagationPolicy=Foreground
-      - PruneLast=true
-    
-  ignoreDifferences:
-    - group: ""
-      kind: PersistentVolume
-      jsonPointers:
-        - /spec/hostPath
