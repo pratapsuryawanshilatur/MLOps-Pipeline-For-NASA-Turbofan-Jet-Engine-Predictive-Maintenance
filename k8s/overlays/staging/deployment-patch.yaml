@@ -7,7 +7,13 @@ spec:
     spec:
       containers:
       - name: turbofan-api
+        $patch: replace  # <-- THIS IS THE KEY!
         env:
+        - name: MODEL_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: turbofan-api-config
+              key: MODEL_PATH
         - name: APP_ENV
           value: staging
         - name: LOG_LEVEL

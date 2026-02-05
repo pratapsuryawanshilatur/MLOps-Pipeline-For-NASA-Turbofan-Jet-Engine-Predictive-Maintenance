@@ -1,0 +1,141 @@
+apiVersion: v1
+data:
+  APP_ENV: staging
+  LOG_LEVEL: INFO
+  MODEL_PATH: /app/models/turbofan_model_v1.joblib
+kind: ConfigMap
+metadata:
+  labels:
+    app: turbofan-api
+    managed-by: argocd
+  name: turbofan-api-config
+  namespace: turbofan-staging
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: turbofan-api
+    component: ml-serving
+    managed-by: argocd
+  name: turbofan-api-service
+  namespace: turbofan-staging
+spec:
+  ports:
+  - name: http
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: turbofan-api
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app: turbofan-api
+    managed-by: argocd
+    type: local
+  name: turbofan-models-pv
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /run/desktop/mnt/host/c/Users/hp/Downloads/mlops-turbofan-project/models
+    type: Directory
+  storageClassName: manual
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: turbofan-api
+    managed-by: argocd
+  name: turbofan-models-pvc
+  namespace: turbofan-staging
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: turbofan-api
+    component: ml-serving
+    managed-by: argocd
+  name: turbofan-api
+  namespace: turbofan-staging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: turbofan-api
+  template:
+    metadata:
+      labels:
+        app: turbofan-api
+        component: ml-serving
+    spec:
+      containers:
+      - env:
+        - name: APP_ENV
+          value: staging
+          valueFrom:
+            configMapKeyRef:
+              key: APP_ENV
+              name: turbofan-api-config
+        - name: LOG_LEVEL
+          value: DEBUG
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL
+              name: turbofan-api-config
+        - name: MODEL_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: MODEL_PATH
+              name: turbofan-api-config
+        image: turbofan-api:v1.0.2
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: turbofan-api
+        ports:
+        - containerPort: 8000
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        volumeMounts:
+        - mountPath: /app/models
+          name: models-volume
+          readOnly: true
+      securityContext:
+        fsGroup: 0
+        runAsUser: 0
+      volumes:
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: turbofan-models-pvc
