@@ -35,13 +35,3 @@ spec:
       jsonPointers:
         - /spec/hostPath
   
-  # Health checks
-  healthChecks:
-    - apiVersion: v1
-      kind: Service
-      name: turbofan-api-service
-      namespace: turbofan-staging
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: turbofan-api
-      namespace: turbofan-staging
