@@ -22,14 +22,14 @@ for key, value in metrics.items():
 # Check if metrics meet minimum requirements
 print("\nValidation Check:")
 if metrics['f1_score'] > 0.7:
-    print("✅ F1 score meets minimum requirement (> 0.7)")
+    print("F1 score meets minimum requirement (> 0.7)")
 else:
-    print("❌ F1 score too low")
+    print("F1 score too low")
 
 if metrics['roc_auc'] > 0.8:
-    print("✅ ROC AUC meets minimum requirement (> 0.8)")
+    print("ROC AUC meets minimum requirement (> 0.8)")
 else:
-    print("❌ ROC AUC too low")
+    print("ROC AUC too low")
 
 # Load feature importance
 feature_importance_path = 'models/turbofan_model_v1_feature_importance.csv'
@@ -40,4 +40,4 @@ try:
 except:
     print("\nFeature importance file not found")
 
-print("\n✅ Model validation complete!")
+print("\nModel validation complete!")

@@ -9,14 +9,14 @@ class TestMLPipeline(unittest.TestCase):
         """Test that required data files exist"""
         self.assertTrue(os.path.exists('data/processed/turbofan_train_FD001_sample.parquet'),
                        "Sample data file should exist")
-        print("✅ Sample data file exists")
+        print("Sample data file exists")
     
     def test_model_files_exist(self):
         """Test that trained model files exist"""
         if os.path.exists('models/turbofan_model_v1.joblib'):
-            print("✅ Trained model file exists")
+            print("Trained model file exists")
         else:
-            print("⚠ No trained model found (this is OK for CI)")
+            print(" No trained model found (this is OK for CI)")
     
     def test_requirements_file(self):
         """Test that requirements file exists and has content"""
@@ -25,13 +25,13 @@ class TestMLPipeline(unittest.TestCase):
         with open('scripts/requirements.txt', 'r') as f:
             content = f.read()
             self.assertGreater(len(content), 0, "requirements.txt should not be empty")
-        print("✅ Requirements file is valid")
+        print(" Requirements file is valid")
     
     def test_import_modules(self):
         """Test that all modules can be imported"""
         import scripts.data_processor as dp
         import scripts.train_model as tm
-        print("✅ All modules import successfully")
+        print("All modules import successfully")
 
 if __name__ == '__main__':
     unittest.main()

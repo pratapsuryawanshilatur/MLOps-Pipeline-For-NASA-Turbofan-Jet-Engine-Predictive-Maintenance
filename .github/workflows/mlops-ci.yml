@@ -36,7 +36,7 @@ jobs:
         sys.path.append('scripts')
         from data_processor import create_columns
         cols = create_columns()
-        print(f'✅ Created {len(cols)} columns')
+        print(f'Created {len(cols)} columns')
         print(f'First 5 columns: {cols[:5]}')
         "
         
@@ -46,7 +46,7 @@ jobs:
         import sys
         sys.path.append('scripts')
         from train_model import TurbofanModelTrainer
-        print('✅ TurbofanModelTrainer imports successfully')
+        print('TurbofanModelTrainer imports successfully')
         "
         
     - name: Run sample training test

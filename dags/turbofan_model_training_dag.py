@@ -24,7 +24,7 @@ def check_data_exists():
     if not os.path.exists(data_path):
         raise FileNotFoundError(f"Training data not found at {data_path}")
     
-    print(f"✓ Data found: {data_path}")
+    print(f"Data found: {data_path}")
     print(f"  Size: {os.path.getsize(data_path) / 1024 / 1024:.2f} MB")
 
 def train_model_locally():
@@ -66,7 +66,7 @@ def validate_model():
     
     # Load and validate model
     model = joblib.load(model_path)
-    print(f"✓ Model loaded successfully")
+    print(f"Model loaded successfully")
     print(f"  Model type: {type(model).__name__}")
     print(f"  Model parameters: {model.get_params()}")
     
@@ -74,15 +74,15 @@ def validate_model():
     with open(metrics_path, 'r') as f:
         metrics = json.load(f)
     
-    print(f"✓ Metrics loaded successfully")
+    print(f"Metrics loaded successfully")
     for metric, value in metrics.items():
         print(f"  {metric}: {value:.4f}")
     
     # Check if metrics meet minimum requirements
     if metrics['f1_score'] < 0.6:
-        print(f"⚠ Warning: F1 score is low: {metrics['f1_score']:.4f}")
+        print(f"Warning: F1 score is low: {metrics['f1_score']:.4f}")
     
-    print("✅ Model validation passed!")
+    print("Model validation passed!")
 
 with DAG(
     'turbofan_model_training',

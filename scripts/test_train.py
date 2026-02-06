@@ -21,10 +21,10 @@ try:
         
         # Run training
         trainer.run_training()
-        print("✅ CI test training completed successfully!")
+        print("CI test training completed successfully!")
     else:
-        print("⚠ Sample data not found, skipping training test")
+        print("Sample data not found, skipping training test")
         
 except Exception as e:
-    print(f"❌ Test failed: {e}")
+    print(f"Test failed: {e}")
     sys.exit(1)

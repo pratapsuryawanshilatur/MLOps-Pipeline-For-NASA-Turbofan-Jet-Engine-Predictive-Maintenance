@@ -104,13 +104,13 @@ def main():
             success = test_func()
             results.append((test_name, success))
         except Exception as e:
-            print(f"❌ {test_name} failed with error: {e}")
+            print(f"{test_name} failed with error: {e}")
             results.append((test_name, False))
     
     # Summary
     print("\n=== Test Summary ===")
     for test_name, success in results:
-        status = "✅ PASS" if success else "❌ FAIL"
+        status = "PASS" if success else "FAIL"
         try:
             print(f"{test_name}: {status}")
         except UnicodeError:

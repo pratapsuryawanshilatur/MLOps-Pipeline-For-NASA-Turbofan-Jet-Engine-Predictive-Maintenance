@@ -15,7 +15,7 @@ default_args = {
     'email': ['pratapsuryawanshi98@gmail.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 1,   
     'retry_delay': timedelta(minutes=5),
 }
 
@@ -58,7 +58,7 @@ def validate_processed_data():
     if df['failure_soon'].notnull().sum() != len(df):
         raise ValueError("Missing values in target column!")
     
-    print(f"✅ Validation passed!")
+    print(f"Validation passed!")
     print(f"   Rows: {len(df)}")
     print(f"   Columns: {len(df.columns)}")
     print(f"   Engines: {df['engine_id'].nunique()}")

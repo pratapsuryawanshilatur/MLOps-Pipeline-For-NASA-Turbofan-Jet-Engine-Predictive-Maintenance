@@ -13,10 +13,10 @@ MODEL_PATH = os.getenv('MODEL_PATH', 'models-data/turbofan_model_v1.joblib')
 
 try:
     model = joblib.load(MODEL_PATH)
-    print(f"✅ Model loaded from {MODEL_PATH}")
+    print(f"Model loaded from {MODEL_PATH}")
     print(f"   Model type: {type(model).__name__}")
 except Exception as e:
-    print(f"❌ Error loading model: {e}")
+    print(f"Error loading model: {e}")
     model = None
 
 # Load feature names (from training)
@@ -24,7 +24,7 @@ try:
     feature_importance_path = MODEL_PATH.replace('.joblib', '_feature_importance.csv')
     feature_df = pd.read_csv(feature_importance_path)
     FEATURE_COLUMNS = feature_df['feature'].tolist()
-    print(f"✅ Loaded {len(FEATURE_COLUMNS)} feature names")
+    print(f"Loaded {len(FEATURE_COLUMNS)} feature names")
 except:
     # Default feature columns if file not found
     FEATURE_COLUMNS = [
@@ -35,7 +35,7 @@ except:
         'sensor_16', 'sensor_17', 'sensor_18', 'sensor_19', 'sensor_20',
         'sensor_21'
     ]
-    print(f"⚠ Using default feature columns ({len(FEATURE_COLUMNS)} features)")
+    print(f"Using default feature columns ({len(FEATURE_COLUMNS)} features)")
 
 # Create FastAPI app
 app = FastAPI(
