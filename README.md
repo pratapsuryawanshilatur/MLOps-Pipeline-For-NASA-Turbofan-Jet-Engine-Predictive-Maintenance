@@ -4,80 +4,23 @@ Project Overview
 A complete MLOps pipeline for NASA's Turbofan Engine Degradation Dataset that demonstrates the full machine learning lifecycle from data ingestion to production deployment with GitOps automation. This project implements predictive maintenance for jet engines using a Random Forest classifier deployed with modern DevOps practices.
 
 Key Features:
-📊 Automated Data Pipeline: Apache Airflow DAGs for data ingestion and preprocessing
-🤖 Machine Learning: Random Forest Classifier with 96.6% accuracy
-🚀 Production API: FastAPI service with health checks and batch predictions
-🐳 Containerized: Docker containers for all components
-⚓ Kubernetes: Multi-replica deployment with PersistentVolumes
-🔄 GitOps: ArgoCD for automated deployment from Git
-🔧 CI/CD: GitHub Actions for automated testing and validation
+1. Automated Data Pipeline: Apache Airflow DAGs for data ingestion and preprocessing
+2. Machine Learning: Random Forest Classifier with 96.6% accuracy
+3. Production API: FastAPI service with health checks and batch predictions
+4. Containerized: Docker containers for all components
+5. Kubernetes: Multi-replica deployment with PersistentVolumes
+6. GitOps: ArgoCD for automated deployment from Git
+7. CI/CD: GitHub Actions for automated testing and validation
 
 Model Performance:
 
-Metric	    Score
-Accuracy	96.63%
-F1 Score	0.8863
-ROC AUC	    0.9906
-Precision	0.9048
-Recall	    0.8684
-
-Architecture:
-┌─────────────────────────────────────────────────────────────┐
-│                     MLOps Pipeline                          │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌────────────┐  │
-│  │  Kaggle │  │  Airflow │  │  ML      │  │  FastAPI   │  │
-│  │  Data   │──│  Pipeline│──│  Training│──│  Serving   │  │
-│  └─────────┘  └──────────┘  └──────────┘  └────────────┘  │
-│         │            │            │               │        │
-│         └────────────┴────────────┴───────────────┼────────┘
-│                                                   │
-│  ┌────────────────────────────────────────────────┼────────┐
-│  │           Kubernetes + ArgoCD Deployment       │        │
-│  │  ┌────────────┐  ┌──────────┐  ┌──────────┐   │        │
-│  │  │ Deployment │  │ Service  │  │  Ingress │◀──┘        │
-│  │  │  (2 Pods)  │  │ (8000)   │  │          │            │
-│  │  └────────────┘  └──────────┘  └──────────┘            │
-│  │                                                        │
-│  │  ┌────────────┐  ┌──────────┐                        │
-│  │  │ ConfigMap  │  │   PVC    │                        │
-│  │  │  (Env Vars)│  │ (Models) │                        │
-│  │  └────────────┘  └──────────┘                        │
-│  └───────────────────────────────────────────────────────┘
-
-Project Structure:
-mlops-turbofan-project/
-├── .github/workflows/
-│   └── mlops-ci.yml              # GitHub Actions CI/CD pipeline
-├── dags/
-│   ├── turbofan_data_pipeline.py     # Airflow: Data processing DAG
-│   └── turbofan_model_training_dag.py # Airflow: Model training DAG
-├── scripts/
-│   ├── data_processor.py         # Data preprocessing logic
-│   ├── train_model.py            # Model training logic
-│   ├── app.py                    # FastAPI application
-│   ├── test_api.py               # API test client
-│   └── requirements.txt          # Python dependencies
-├── k8s/
-│   ├── base/                     # Common Kubernetes manifests
-│   │   ├── configmap.yaml
-│   │   ├── deployment.yaml
-│   │   ├── service.yaml
-│   │   ├── persistent-volume.yaml
-│   │   └── persistent-volume-claim.yaml
-│   ├── overlays/
-│   │   └── staging/              # Staging environment configurations
-│   └── argocd/
-│       └── turbofan-app.yaml     # ArgoCD Application manifest
-├── data/
-│   ├── raw/                      # NASA original data
-│   └── processed/                # Cleaned data (git-ignored)
-├── models/                       # Trained models (git-ignored)
-├── Dockerfile                    # Training container
-├── Dockerfile.airflow            # Custom Airflow with ML packages
-├── Dockerfile.api                # FastAPI container
-├── docker-compose.yml            # Multi-service orchestration
-└── README.md                     # This file
+| Metric | Score |
+|--------|-------|
+| **Accuracy** | 96.63% |
+| **F1 Score** | 0.8863 |
+| **ROC AUC** | 0.9906 |
+| **Precision** | 0.9048 |
+| **Recall** | 0.8684 |
 
 Quick Start:
 
@@ -88,42 +31,42 @@ Python 3.9+
 Git
 
 1. Local Development Setup:
-# Clone the repository
+Clone the repository
 git clone https://github.com/pratapsuryawanshilatur/MLOps-Pipeline-For-NASA-Turbofan-Jet-Engine-Predictive-Maintenance.git
 cd MLOps-Pipeline-For-NASA-Turbofan-Jet-Engine-Predictive-Maintenance
 
-# Start all services with Docker Compose
+Start all services with Docker Compose
 docker-compose up -d
 
-# Access services:
-# Airflow UI: http://localhost:8081
-# FastAPI: http://localhost:8000
-# API Docs: http://localhost:8000/docs
+Access services:
+Airflow UI: http://localhost:8081
+FastAPI: http://localhost:8000
+API Docs: http://localhost:8000/docs
 
 2. Kubernetes Deployment with ArgoCD:
-# Install ArgoCD
+Install ArgoCD
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-# Expose ArgoCD UI
+Expose ArgoCD UI
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
 
-# Get ArgoCD credentials
+Get ArgoCD credentials
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
-# Deploy the application via ArgoCD
+Deploy the application via ArgoCD
 kubectl apply -f k8s/argocd/turbofan-app.yaml
 
 Example API Usage:
-# Health check
+Health check
 curl http://localhost:8000/health
 
-# Single prediction
+Single prediction
 curl -X POST "http://localhost:8000/predict" \
   -H "Content-Type: application/json" \
   -d '{"features": [0.5, 0.3, 0.2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.1, 0.2, 0.3]}'
 
-# Model information
+Model information
 curl http://localhost:8000/model/info
 
 Data Pipeline:
@@ -164,13 +107,13 @@ Auto-Sync: ArgoCD synchronizes cluster state with Git
 Self-Healing: ArgoCD continuously reconciles state
 
 Testing:
-# Run all tests
+//Run all tests
 python -m pytest scripts/
 
-# Test API locally
+//Test API locally
 python scripts/test_api.py
 
-# CI/CD pipeline automatically runs on every push
+//CI/CD pipeline automatically runs on every push
 
 Monitoring & Logging:
 Airflow UI: Monitor DAG executions at http://localhost:8081
@@ -186,16 +129,16 @@ Common Issues--
 4. ArgoCD sync failures: Verify kustomization.yaml syntax
 
 Debug Commands:
-# Check all services
+//Check all services
 docker-compose ps
 
-# View logs
+//View logs
 docker-compose logs turbofan-api
 
-# Kubernetes status
+//Kubernetes status
 kubectl get all -n turbofan-staging
 
-# ArgoCD status
+//ArgoCD status
 kubectl get application -n argocd
 
 Development:
